@@ -1,127 +1,116 @@
 //PROGRAMACION DE UN MOTOR PAP WITH DRIVER MORADITO(DVR8825)
-#include <AccelStepper.h>
 
-AccelStepper delanteroIzq(1,2,3); //(Driver, pinPaso, pinDir) ****Motor1 o 
-AccelStepper delanteroDer(1,4,5); 
-AccelStepper traseroIzq(1,6,7); 
-AccelStepper traseroDer(1,8,9); 
+const int delanteroIzq[2]= {2,3}; 
+const int delanteroDer[2]= {4,5};
+const int traseroIzq[2]= {6,7};
+const int traseroDer[2]= {8,9};
 
-int velocidad = 1500;
+const int velocidad = 500;
 
  
 void setup() {
-  //velocidades Maximas 
-  delanteroIzq.setMaxSpeed(3000);
-  delanteroDer.setMaxSpeed(3000);
-  traseroIzq.setMaxSpeed(3000);
-  traseroDer.setMaxSpeed(3000);  
 }
 
 void loop() {
-
 }
 
 
-/* FUNCIONES DE MOVIMIENTO :
-    adelante();
-    atras();
-    derecha();
-    izquierda();
-    diagonalDerechaAdelante();
-    diagonalDerechaAtras();
-    diagonalIzquierdaAdelante();
-    diagonalIzquierdaAtras();
-    giroDerecha();
-    giroIzquierda();
-    quieto();
-    Alocao(); "Se aloca"
-*/  
+
+//Movimientos Motor 
+
+void adl(int motor[]){
+  int dirPin = motor[0];
+  int stepPin = motor[1];
+  digitalWrite(dirPin,HIGH); 
+  for(int x = 0; x < 200; x++){
+    digitalWrite(stepPin,HIGH);
+    delayMicroseconds(velocidad);
+    digitalWrite(stepPin,LOW);
+    delayMicroseconds(velocidad);
+}
+}
+void atr (int motor[]){
+  int dirPin = motor[0];
+  int stepPin = motor[1];
+  digitalWrite(dirPin,LOW); 
+  for(int x = 0; x < 200; x++){
+    digitalWrite(stepPin,HIGH);
+    delayMicroseconds(velocidad);
+    digitalWrite(stepPin,LOW);
+    delayMicroseconds(velocidad);
+}
+void stp(int motor[]){
+  int dirPin = motor[0];
+  int stepPin = motor[1];
+  digitalWrite(stepPin, LOW)
+}
+//Movimientos del Carro
+
 void adelante(){
-  delanteroIzq.setSpeed(velocidad);
-  delanteroDer.setSpeed(velocidad);
-  traseroIzq.setSpeed(velocidad);
-  traseroDer.setSpeed(velocidad);
+  adl(delanteroIzq);
+  adl(delanteroDer);
+  adl(traseroIzq);
+  adl(traseroDer); 
 }
 void atras(){
-  delanteroIzq.setSpeed(-velocidad);
-  delanteroDer.setSpeed(-velocidad);
-  traseroIzq.setSpeed(-velocidad);
-  traseroDer.setSpeed(-velocidad);
+  atr(delanteroIzq);
+  atr(delanteroDer);
+  atr(traseroIzq);
+  atr(traseroDer);
 }
 void derecha(){
-  delanteroIzq.setSpeed(velocidad);
-  delanteroDer.setSpeed(-velocidad);
-  traseroIzq.setSpeed(-velocidad);
-  traseroDer.setSpeed(velocidad);
+  adl(delanteroIzq);
+  atr(delanteroDer);
+  atr(traseroIzq);
+  adl(traseroDer);
 }
 void izquierda(){
-  delanteroIzq.setSpeed(-velocidad);
-  delanteroDer.setSpeed(velocidad);
-  traseroIzq.setSpeed(velocidad);
-  traseroDer.setSpeed(-velocidad);
+  atr(delanteroIzq);
+  adl(delanteroDer);
+  adl(traseroIzq);
+  atr(traseroDer);
 }
 void diagonalDerechaAdelante(){
-  delanteroIzq.setSpeed(velocidad);
-  delanteroDer.setSpeed(0);
-  traseroIzq.setSpeed(0);
-  traseroDer.setSpeed(velocidad);
+  adl(delanteroIzq);
+  stp(delanteroDer);
+  stp(traseroIzq);
+  adl(traseroDer);
 }
 void diagonalIzquierdaAtras(){
-  delanteroIzq.setSpeed(-velocidad);
-  delanteroDer.setSpeed(0);
-  traseroIzq.setSpeed(0);
-  traseroDer.setSpeed(-velocidad);
+  atr(delanteroIzq);
+  stp(delanteroDer);
+  stp(traseroIzq);
+  atr(traseroDer);  
 }
 void diagonalIzquierdaAdelante(){
-  delanteroIzq.setSpeed(0);
-  delanteroDer.setSpeed(velocidad);
-  traseroIzq.setSpeed(velocidad);
-  traseroDer.setSpeed(0);
+  stp(delanteroIzq);
+  adl(delanteroDer);
+  adl(traseroIzq);
+  stp(traseroDer);
 }
 void diagonalDerechaAtras(){
-  delanteroIzq.setSpeed(0);
-  delanteroDer.setSpeed(-velocidad);
-  traseroIzq.setSpeed(-velocidad);
-  traseroDer.setSpeed(0);
-}  
-void giroIzquierda(){
-  delanteroIzq.setSpeed(-velocidad);
-  delanteroDer.setSpeed(velocidad);
-  traseroIzq.setSpeed(-velocidad);
-  traseroDer.setSpeed(velocidad);
+  stp(delanteroIzq);
+  atr(delanteroDer);
+  atr(traseroIzq);
+  stp(traseroDer);
 }
 void giroDerecha(){
-  delanteroIzq.setSpeed(velocidad);
-  delanteroDer.setSpeed(-velocidad);
-  traseroIzq.setSpeed(velocidad);
-  traseroDer.setSpeed(-velocidad); 
+  atr(delanteroIzq);
+  adl(delanteroDer);
+  atr(traseroIzq);
+  adl(traseroDer);
+  
+}
+void giroIzquierda(){
+  adl(delanteroIzq);
+  atr(delanteroDer);
+  adl(traseroIzq);
+  atr(traseroDer);
+
 }
 void quieto(){
-  delanteroIzq.setSpeed(0);
-  delanteroDer.setSpeed(0);
-  traseroIzq.setSpeed(0);
-  traseroDer.setSpeed(0);
-  }
-void Alocao(){
-    adelante();
-    delay(200);
-    atras();
-    delay(200);
-    derecha();
-    delay(200);
-    izquierda();
-    delay(200);
-    diagonalDerechaAdelante();
-    delay(200);
-    diagonalDerechaAtras();
-    delay(200);
-    diagonalIzquierdaAdelante();
-    delay(200);
-    diagonalIzquierdaAtras();
-    delay(200);
-    giroDerecha();
-    delay(200);
-    giroIzquierda();
-    delay(200);
-    quieto();
+  stp(delanteroIzq[2]);
+  stp(delanteroDer[2]);
+  stp(traseroIzq[2]);
+  stp(traseroDer[2]); 
 }
